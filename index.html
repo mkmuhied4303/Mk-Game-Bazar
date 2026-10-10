@@ -2,33 +2,116 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mk Game Bazar | Free Fire Top Up</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MK GAME BAZAR</title>
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#0c1020;color:white}
-header{padding:18px 12px;background:#171d32;text-align:center;font-size:23px;font-weight:bold;color:#b99aff}
-.hero{margin:15px;padding:25px 12px;text-align:center;background:linear-gradient(135deg,#5928bd,#151a30);border-radius:15px}
-.hero h1{font-size:27px}
-.hero p{line-height:1.7;color:#e5dcff}
-main{max-width:650px;margin:auto;padding:10px}
-h2{font-size:20px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.card{background:#191f35;border:1px solid #41476a;padding:15px 10px;text-align:center;border-radius:13px}
-.card .icon{font-size:29px}
-.card h3{font-size:16px}
-.price{color:#c2a7ff;font-weight:bold;margin:12px 0}
-button{border:0;border-radius:8px;padding:12px;font-weight:bold;font-size:15px;cursor:pointer}
-.buy{width:100%;background:#7948f5;color:white}
-.section{margin:22px 0}
-form{padding:16px;background:#191f35;border-radius:13px}
-label{display:block;margin:14px 0 7px}
-input,select{width:100%;padding:13px;border-radius:8px;border:1px solid #444c68;background:#0e1426;color:white;font-size:15px}
-.pay{background:#252c45;padding:13px;border-radius:10px;line-height:1.9;margin-top:12px;overflow-wrap:anywhere}
-.submit{width:100%;background:#18a86b;color:white;margin-top:18px}
-.note{font-size:13px;line-height:1.8;color:#c8cee0}
-footer{text-align:center;background:#171d32;padding:23px 10px;margin-top:25px;color:#c6cbe0;line-height:1.8}
+body{
+ margin:0;
+ background:#0b0e20;
+ color:white;
+ font-family:Arial,sans-serif;
+}
+header{
+ background:#191f35;
+ padding:20px;
+ text-align:center;
+ font-size:28px;
+ font-weight:bold;
+ color:#bd9cff;
+}
+.hero{
+ margin:24px;
+ padding:45px 15px;
+ text-align:center;
+ border-radius:20px;
+ background:linear-gradient(120deg,#5826b9,#191f35);
+}
+.hero h1{font-size:36px}
+.hero p{font-size:18px;line-height:1.7}
+section{padding:16px}
+h2{font-size:25px}
+.packages{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:12px;
+}
+.card{
+ background:#191f35;
+ border:1px solid #383f60;
+ border-radius:16px;
+ padding:12px;
+ text-align:center;
+}
+.card img{
+ width:100%;
+ height:150px;
+ object-fit:cover;
+ border-radius:10px;
+ background:linear-gradient(135deg,#38217d,#10152b);
+}
+.card h3{
+ font-size:17px;
+ min-height:42px;
+}
+.price{
+ color:#c5a2ff;
+ font-weight:bold;
+ margin:12px 0;
+}
+button{
+ width:100%;
+ padding:14px 8px;
+ border:0;
+ border-radius:10px;
+ background:#7541f5;
+ color:white;
+ font-size:16px;
+ font-weight:bold;
+}
+.formbox{
+ background:#191f35;
+ border-radius:15px;
+ padding:18px;
+ margin-top:20px;
+}
+label{
+ display:block;
+ margin-top:14px;
+ margin-bottom:7px;
+}
+input,select{
+ width:100%;
+ padding:13px;
+ border-radius:8px;
+ border:1px solid #454d70;
+ background:#0d1328;
+ color:white;
+ font-size:16px;
+}
+.pay{
+ background:#252c49;
+ border-radius:12px;
+ padding:18px;
+ text-align:center;
+ margin-top:18px;
+}
+.pay strong{
+ font-size:26px;
+}
+.submit{
+ background:#08bd69;
+ margin-top:18px;
+}
+footer{
+ text-align:center;
+ padding:22px;
+ color:#b9c4e7;
+}
+@media(min-width:800px){
+ .packages{grid-template-columns:repeat(5,minmax(0,1fr))}
+}
 </style>
 </head>
 
@@ -36,142 +119,175 @@ footer{text-align:center;background:#171d32;padding:23px 10px;margin-top:25px;co
 
 <header>💎 MK GAME BAZAR</header>
 
-<section class="hero">
+<div class="hero">
 <h1>FREE FIRE TOP UP</h1>
-<p>আপনার পছন্দের প্যাকেজ নির্বাচন করুন<br>
-সহজে অর্ডার করুন WhatsApp-এর মাধ্যমে</p>
-</section>
+<p>
+আপনার পছন্দের প্যাকেজ নির্বাচন করুন<br>
+সহজে অর্ডার করুন WhatsApp-এর মাধ্যমে
+</p>
+</div>
 
-<main>
+<section id="packages">
+<h2>👑 Membership Packages</h2>
 
-<section class="section">
-<h2>👑 Membership & Diamond Packages</h2>
-
-<div class="grid">
+<div class="packages">
 
 <div class="card">
-<div class="icon">👑</div>
+<img src="weekly.jpg" alt="Weekly Membership">
 <h3>Weekly Membership</h3>
 <div class="price">দাম জানতে যোগাযোগ করুন</div>
-<button class="buy" onclick="choose('Weekly Membership')">অর্ডার করুন</button>
+<button onclick="choose('Weekly Membership')">অর্ডার করুন</button>
 </div>
 
 <div class="card">
-<div class="icon">👑</div>
+<img src="weekly2x.jpg" alt="2X Weekly Membership">
+<h3>2X Weekly Membership</h3>
+<div class="price">দাম জানতে যোগাযোগ করুন</div>
+<button onclick="choose('2X Weekly Membership')">অর্ডার করুন</button>
+</div>
+
+<div class="card">
+<img src="weekly3x.jpg" alt="3X Weekly Membership">
+<h3>3X Weekly Membership</h3>
+<div class="price">দাম জানতে যোগাযোগ করুন</div>
+<button onclick="choose('3X Weekly Membership')">অর্ডার করুন</button>
+</div>
+
+<div class="card">
+<img src="weekly4x.jpg" alt="4X Weekly Membership">
+<h3>4X Weekly Membership</h3>
+<div class="price">দাম জানতে যোগাযোগ করুন</div>
+<button onclick="choose('4X Weekly Membership')">অর্ডার করুন</button>
+</div>
+
+<div class="card">
+<img src="weekly5x.jpg" alt="5X Weekly Membership">
+<h3>5X Weekly Membership</h3>
+<div class="price">দাম জানতে যোগাযোগ করুন</div>
+<button onclick="choose('5X Weekly Membership')">অর্ডার করুন</button>
+</div>
+
+<div class="card">
+<img src="monthly.jpg" alt="Monthly Membership">
 <h3>Monthly Membership</h3>
 <div class="price">দাম জানতে যোগাযোগ করুন</div>
-<button class="buy" onclick="choose('Monthly Membership')">অর্ডার করুন</button>
+<button onclick="choose('Monthly Membership')">অর্ডার করুন</button>
 </div>
 
 <div class="card">
-<div class="icon">💎</div>
-<h3>1X Package</h3>
+<img src="monthly2x.jpg" alt="2X Monthly Membership">
+<h3>2X Monthly Membership</h3>
 <div class="price">দাম জানতে যোগাযোগ করুন</div>
-<button class="buy" onclick="choose('1X Package')">অর্ডার করুন</button>
+<button onclick="choose('2X Monthly Membership')">অর্ডার করুন</button>
 </div>
 
 <div class="card">
-<div class="icon">💎</div>
-<h3>2X Package</h3>
+<img src="monthly3x.jpg" alt="3X Monthly Membership">
+<h3>3X Monthly Membership</h3>
 <div class="price">দাম জানতে যোগাযোগ করুন</div>
-<button class="buy" onclick="choose('2X Package')">অর্ডার করুন</button>
+<button onclick="choose('3X Monthly Membership')">অর্ডার করুন</button>
 </div>
 
 <div class="card">
-<div class="icon">💎</div>
-<h3>4X Package</h3>
+<img src="monthly4x.jpg" alt="4X Monthly Membership">
+<h3>4X Monthly Membership</h3>
 <div class="price">দাম জানতে যোগাযোগ করুন</div>
-<button class="buy" onclick="choose('4X Package')">অর্ডার করুন</button>
+<button onclick="choose('4X Monthly Membership')">অর্ডার করুন</button>
 </div>
 
 <div class="card">
-<div class="icon">💎</div>
-<h3>5X Package</h3>
+<img src="monthly5x.jpg" alt="5X Monthly Membership">
+<h3>5X Monthly Membership</h3>
 <div class="price">দাম জানতে যোগাযোগ করুন</div>
-<button class="buy" onclick="choose('5X Package')">অর্ডার করুন</button>
+<button onclick="choose('5X Monthly Membership')">অর্ডার করুন</button>
 </div>
 
 </div>
 </section>
 
-<section class="section" id="order">
+<section id="order">
 <h2>🛒 অর্ডার করুন</h2>
+
+<div class="formbox">
 
 <form id="orderForm">
 
-<label for="package">প্যাকেজ নির্বাচন করুন</label>
+<label>প্যাকেজ নির্বাচন করুন</label>
 <select id="package" required>
 <option value="">প্যাকেজ নির্বাচন করুন</option>
 <option>Weekly Membership</option>
+<option>2X Weekly Membership</option>
+<option>3X Weekly Membership</option>
+<option>4X Weekly Membership</option>
+<option>5X Weekly Membership</option>
 <option>Monthly Membership</option>
-<option>1X Package</option>
-<option>2X Package</option>
-<option>4X Package</option>
-<option>5X Package</option>
+<option>2X Monthly Membership</option>
+<option>3X Monthly Membership</option>
+<option>4X Monthly Membership</option>
+<option>5X Monthly Membership</option>
 </select>
 
-<label for="uid">Free Fire Player UID</label>
-<input id="uid" required inputmode="numeric" placeholder="আপনার Player UID">
+<label>Free Fire Player UID</label>
+<input id="uid" required placeholder="আপনার Player UID লিখুন">
 
-<label for="customer">আপনার নাম</label>
+<label>আপনার নাম</label>
 <input id="customer" required placeholder="নাম লিখুন">
 
-<label for="phone">আপনার মোবাইল নম্বর</label>
-<input id="phone" type="tel" required placeholder="01XXXXXXXXX">
+<label>আপনার মোবাইল নম্বর</label>
+<input id="phone" required placeholder="মোবাইল নম্বর লিখুন">
 
-<label for="payment">পেমেন্ট পদ্ধতি</label>
+<label>পেমেন্ট পদ্ধতি</label>
 <select id="payment" required>
-<option value="">পেমেন্ট নির্বাচন করুন</option>
-<option value="bKash">বিকাশ</option>
-<option value="Nagad">নগদ</option>
+<option value="">নির্বাচন করুন</option>
+<option>bKash</option>
+<option>Nagad</option>
 </select>
 
-<div class="pay">
-<strong>🩷 বিকাশ / 🟠 নগদ</strong><br>
-পেমেন্ট নম্বর: <strong>01743038194</strong><br>
-পেমেন্ট করার আগে নম্বর ও টাকার পরিমাণ নিশ্চিত করুন।
-</div>
-
-<label for="trx">Transaction ID</label>
+<label>Transaction ID</label>
 <input id="trx" required placeholder="TrxID লিখুন">
 
-<button type="submit" class="submit">WhatsApp-এ অর্ডার করুন</button>
-
-<p class="note">
-পেমেন্ট করার পর Transaction ID দিন। টাকা পাওয়া নিশ্চিত করার পর অর্ডার প্রসেস করা হবে। PIN বা OTP কাউকে দেবেন না।
-</p>
+<button class="submit" type="submit">
+WhatsApp-এ অর্ডার পাঠান
+</button>
 
 </form>
+
+<div class="pay">
+<h3>bKash / Nagad পেমেন্ট নম্বর</h3>
+<strong>01743038194</strong>
+<p>WhatsApp: 01773816292</p>
+</div>
+
+</div>
 </section>
 
-</main>
-
 <footer>
-<strong>MK GAME BAZAR</strong><br>
-Free Fire Top-Up Service<br>
-© 2026 Mk Game Bazar
+© 2026 MK GAME BAZAR<br>
+Free Fire Top-Up Service
 </footer>
 
 <script>
-const whatsappNumber = "8801773816292";
+const whatsappNumber="8801773816292";
 
 function choose(name){
-  document.getElementById("package").value = name;
-  document.getElementById("order").scrollIntoView({behavior:"smooth"});
+ document.getElementById("package").value=name;
+ document.getElementById("order").scrollIntoView({
+  behavior:"smooth"
+ });
 }
 
 document.getElementById("orderForm").addEventListener("submit",function(e){
-  e.preventDefault();
+ e.preventDefault();
 
-  const pkg = document.getElementById("package").value;
-  const uid = document.getElementById("uid").value.trim();
-  const customer = document.getElementById("customer").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const payment = document.getElementById("payment").value;
-  const trx = document.getElementById("trx").value.trim();
+ const pkg=document.getElementById("package").value;
+ const uid=document.getElementById("uid").value.trim();
+ const customer=document.getElementById("customer").value.trim();
+ const phone=document.getElementById("phone").value.trim();
+ const payment=document.getElementById("payment").value;
+ const trx=document.getElementById("trx").value.trim();
 
-  const message =
-`MK GAME BAZAR - NEW ORDER
+ const message=
+ `MK GAME BAZAR - NEW ORDER
 Package: ${pkg}
 Free Fire UID: ${uid}
 Customer: ${customer}
@@ -181,9 +297,9 @@ Payment Number: 01743038194
 Transaction ID: ${trx}
 Status: Payment verification pending`;
 
-  window.location.href =
-    "https://wa.me/" + whatsappNumber +
-    "?text=" + encodeURIComponent(message);
+ window.location.href=
+ "https://wa.me/"+whatsappNumber+
+ "?text="+encodeURIComponent(message);
 });
 </script>
 
