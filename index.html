@@ -170,7 +170,7 @@ footer{
 <div class="card">
 <img src="monthly.jpg" alt="Monthly Membership">
 <h3>Monthly Membership</h3>
-<div class="price">দাম জানতে যোগাযোগ করুন</div>
+<div class="৳850">দাম জানতে যোগাযোগ করুন</div>
 <button onclick="choose('Monthly Membership')">অর্ডার করুন</button>
 </div>
 
@@ -302,42 +302,74 @@ Status: Payment verification pending`;
  "?text="+encodeURIComponent(message);
 });
 </script>
-<style>
-#account-section {
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  z-index: 99999;
-  padding: 0 !important;
-  text-align: right !important;
-  color: white;
-}
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-#account-section h2 {
-  display: none;
-}
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-#account-section p {
-  font-size: 11px;
-  margin: 4px 0;
-}
+const firebaseConfig = {
+  apiKey: "AIzaSyB5t7O5NAfl5w_x8O4bNOd8QqMuUFazwig",
+  authDomain: "mk-game-bazar.firebaseapp.com",
+  projectId: "mk-game-bazar",
+  storageBucket: "mk-game-bazar.firebasestorage.app",
+  messagingSenderId: "581004776244",
+  appId: "1:581004776244:web:3f6fbb531349dcc5da0b61",
+  measurementId: "G-3H8PJEZ932"
+};
 
-#account-section button {
-  background: #7c3aed;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 9px 12px;
-  font-size: 12px;
-  cursor: pointer;
-}
-</style>
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-<section id="account-section">
-  <h2>👤 আপনার অ্যাকাউন্ট</h2>
-  <p id="login-status">লগইন করা হয়নি</p>
-  <button id="google-login" type="button">🔐 Gmail Login</button>
-  <button id="google-logout" type="button" hidden>Logout</button>
-</section>
+const loginButton = document.getElementById("google-login");
+const logoutButton = document.getElementById("google-logout");
+const loginStatus = document.getElementById("login-status");
+
+loginButton.addEventListener("click", async () => {
+  loginButton.disabled = true;
+  loginStatus.textContent = "লগইন হচ্ছে...";
+
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (error) {
+    console.error("Google login error:", error);
+    loginStatus.textContent =
+      "লগইন হয়নি: " + error.code;
+    alert("লগইন করতে সমস্যা হয়েছে: " + error.code);
+  } finally {
+    loginButton.disabled = false;
+  }
+});
+
+logoutButton.addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    alert("লগআউট করতে সমস্যা হয়েছে।");
+    console.error(error);
+  }
+});
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    loginStatus.textContent =
+      "লগইন: " + (user.displayName || user.email);
+
+    loginButton.hidden = true;
+    logoutButton.hidden = false;
+  } else {
+    loginStatus.textContent = "লগইন করা হয়নি";
+
+    loginButton.hidden = false;
+    logoutButton.hidden = true;
+  }
+});
+</script>
 </body>
   </html>
