@@ -302,69 +302,42 @@ Status: Payment verification pending`;
  "?text="+encodeURIComponent(message);
 });
 </script>
-<!-- Google Login Section -->
-<section id="account-section" style="padding:20px;text-align:center;color:white;">
+<style>
+#account-section {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 9999;
+  padding: 0 !important;
+  text-align: right !important;
+  color: white;
+}
+
+#account-section h2 {
+  display: none;
+}
+
+#account-section p {
+  font-size: 11px;
+  margin: 4px 0;
+}
+
+#account-section button {
+  background: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+</style>
+
+<section id="account-section">
   <h2>👤 আপনার অ্যাকাউন্ট</h2>
   <p id="login-status">লগইন করা হয়নি</p>
-  <button id="google-login" type="button">🔐 Google দিয়ে লগইন</button>
-  <button id="google-logout" type="button" hidden>লগআউট</button>
+  <button id="google-login" type="button">🔐 Gmail Login</button>
+  <button id="google-logout" type="button" hidden>Logout</button>
 </section>
- <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB5t7O5NAfl5w_x8O4bNOd8QqMuUFazwig",
-  authDomain: "mk-game-bazar.firebaseapp.com",
-  projectId: "mk-game-bazar",
-  storageBucket: "mk-game-bazar.firebasestorage.app",
-  messagingSenderId: "581004776244",
-  appId: "1:581004776244:web:3f6fbb531349dcc5da0b61",
-  measurementId: "G-3H8PJEZ932"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-
-const loginButton = document.getElementById("google-login");
-const logoutButton = document.getElementById("google-logout");
-const statusText = document.getElementById("login-status");
-
-loginButton.addEventListener("click", async () => {
-  try {
-    await signInWithPopup(auth, provider);
-  } catch (error) {
-    alert("লগইন করা যায়নি: " + error.message);
-  }
-});
-
-logoutButton.addEventListener("click", async () => {
-  try {
-    await signOut(auth);
-  } catch (error) {
-    alert("লগআউট করা যায়নি। আবার চেষ্টা করুন।");
-  }
-});
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    statusText.textContent = "লগইন করা হয়েছে: " + user.email;
-    loginButton.hidden = true;
-    logoutButton.hidden = false;
-  } else {
-    statusText.textContent = "লগইন করা হয়নি";
-    loginButton.hidden = false;
-    logoutButton.hidden = true;
-  }
-});
- </script>
 </body>
   </html>
