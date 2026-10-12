@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MK GAME BAZAR | Admin Panel</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  padding:20px;
+  font-family:Arial,sans-serif;
+  background:#0b1020;
+  color:white
+}
+.container{max-width:1100px;margin:auto}
+h1{color:#a78bfa}
+.box{
+  background:#171e33;
+  padding:18px;
+  border-radius:12px;
+  margin:15px 0
+}
+button{
+  border:0;
+  padding:12px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+  margin:5px
+}
+.login{background:#8b5cf6;color:white}
+.logout{background:#ef4444;color:white}
+.refresh{background:#22c55e;color:#07110a}
+.status{color:#fbbf24}
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px
+}
+th,td{
+  padding:12px;
+  text-align:left;
+  border-bottom:1px solid #303953
+}
+.table-wrap{overflow-x:auto}
+input,select{
+  width:100%;
+  padding:10px;
+  margin:7px 0;
+  border-radius:6px;
+  border:1px solid #526079
+}
+#dashboard{display:none}
+.muted{color:#b8c1d9}
+</style>
+</head>
+
+<body>
+<div class="container">
+  <h1>🎮 MK GAME BAZAR</h1>
+  <h2>Admin Panel</h2>
+
+  <div class="box" id="loginBox">
+    <p>নিজের অনুমোদিত Google অ্যাকাউন্ট দিয়ে লগইন করুন।</p>
+    <button class="login" id="loginBtn">Login with Google</button>
+    <p id="loginMessage" class="status"></p>
+  </div>
+
+  <div id="dashboard">
+    <div class="box">
+      <p id="adminEmail"></p>
+      <button class="logout" id="logoutBtn">Logout</button>
+      <button class="refresh" id="refreshBtn">Refresh Orders</button>
+    </div>
+
+    <div class="box">
+      <h3>📊 Dashboard</h3>
+      <p>মোট অর্ডার: <strong id="totalOrders">0</strong></p>
+      <p>Pending: <strong id="pendingOrders">0</strong></p>
+      <p>Completed: <strong id="completedOrders">0</strong></p>
+      <p>বিক্রির হিসাব: <strong id="totalSales">৳0</strong></p>
+      <p class="muted">বিক্রির হিসাব Completed অর্ডারের প্যাকেজের দাম থেকে গণনা হবে।</p>
+    </div>
+
+    <div class="box">
+      <h3>📋 অর্ডার তালিকা</h3>
+      <p id="ordersMessage">অর্ডার লোড হয়নি।</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>সময়</th>
+              <th>ক্রেতা</th>
+              <th>Free Fire UID</th>
+              <th>প্যাকেজ</th>
+              <th>দাম</th>
+              <th>স্ট্যাটাস</th>
+              <th>পরিবর্তন</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  orderBy,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB5t7O5NAfl5w_x8O4bNOd8QqMuUFazwig",
+  authDomain: "mk-game-bazar.firebaseapp.com",
+  projectId: "mk-game-bazar",
+  storageBucket: "mk-game-bazar.firebasestorage.app",
+  messagingSenderId: "581004776244",
+  appId: "1:581004776244:web:3f6fbb531349dcc5da0b61",
+  measurementId: "G-3H8PJEZ932"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+const loginBox = document.getElementById("loginBox");
+const dashboard = document.getElementById("dashboard");
+const loginMessage = document.getElementById("loginMessage");
+const ordersMessage = document.getElementById("ordersMessage");
+
+document.getElementById("loginBtn").onclick = async () => {
+  try {
+    loginMessage.textContent = "লগইন হচ্ছে...";
+    await signInWithPopup(auth, provider);
+  } catch (error) {
+    loginMessage.textContent = "লগইন ব্যর্থ: " + error.message;
+  }
+};
+
+document.getElementById("logoutBtn").onclick = () => signOut(auth);
+document.getElementById("refreshBtn").onclick = loadOrders;
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    loginBox.style.display = "block";
+    dashboard.style.display = "none";
+    loginMessage.textContent = "";
+    return;
+  }
+
+  try {
+    const adminRef = doc(db, "admins", user.uid);
+    const adminSnap = await getDoc(adminRef);
+
+    if (!adminSnap.exists() || adminSnap.data().role !== "admin") {
+      await signOut(auth);
+      loginMessage.textContent =
+        "এই Gmail-কে Admin হিসেবে অনুমোদন দেওয়া হয়নি।";
+      return;
+    }
+
+    loginBox.style.display = "none";
+    dashboard.style.display = "block";
+    document.getElementById("adminEmail").textContent =
+      "লগইন: " + user.email;
+
+    await loadOrders();
+  } catch (error) {
+    loginBox.style.display = "block";
+    dashboard.style.display = "none";
+    loginMessage.textContent =
+      "অনুমতি যাচাই করা যায়নি। Firestore Rules পরীক্ষা করুন।";
+  }
+});
+
+async function loadOrders() {
+  ordersMessage.textContent = "অর্ডার লোড হচ্ছে...";
+  const body = document.getElementById("ordersBody");
+  body.replaceChildren();
+
+  try {
+    const q = query(
+      collection(db, "orders"),
+      orderBy("createdAt", "desc")
+    );
+    const snapshot = await getDocs(q);
+
+    let pending = 0;
+    let completed = 0;
+    let sales = 0;
+
+    snapshot.forEach((item) => {
+      const data = item.data();
+      const status = data.status || "Pending";
+      const price = Number(data.price) || 0;
+
+      if (status === "Pending") pending++;
+      if (status === "Completed") {
+        completed++;
+        sales += price;
+      }
+
+      const row = document.createElement("tr");
+      const values = [
+        data.createdAt?.toDate
+          ? data.createdAt.toDate().toLocaleString()
+          : "—",
+        data.customerName || "—",
+        data.uid || "—",
+        data.packageName || "—",
+        "৳" + price,
+        status
+      ];
+
+      values.forEach((value) => {
+        const cell = document.createElement("td");
+        cell.textContent = String(value);
+        row.appendChild(cell);
+      });
+
+      const actionCell = document.createElement("td");
+      const select = document.createElement("select");
+
+      ["Pending", "Processing", "Completed", "Cancelled"].forEach((s) => {
+        const option = document.createElement("option");
+        option.value = s;
+        option.textContent = s;
+        option.selected = s === status;
+        select.appendChild(option);
+      });
+
+      const save = document.createElement("button");
+      save.textContent = "Save";
+      save.className = "refresh";
+
+      save.onclick = async () => {
+        try {
+          await updateDoc(doc(db, "orders", item.id), {
+            status: select.value
+          });
+          ordersMessage.textContent = "স্ট্যাটাস আপডেট হয়েছে।";
+          await loadOrders();
+        } catch (error) {
+          ordersMessage.textContent =
+            "আপডেট হয়নি। Firestore Rules পরীক্ষা করুন।";
+        }
+      };
+
+      actionCell.append(select, save);
+      row.appendChild(actionCell);
+      body.appendChild(row);
+    });
+
+    document.getElementById("totalOrders").textContent = snapshot.size;
+    document.getElementById("pendingOrders").textContent = pending;
+    document.getElementById("completedOrders").textContent = completed;
+    document.getElementById("totalSales").textContent =
+      "৳" + sales.toLocaleString();
+
+    ordersMessage.textContent = snapshot.empty
+      ? "এখনো কোনো অর্ডার পাওয়া যায়নি।"
+      : "অর্ডার লোড সম্পন্ন।";
+  } catch (error) {
+    ordersMessage.textContent =
+      "অর্ডার লোড হয়নি। Firestore Rules ও orders Collection পরীক্ষা করুন।";
+  }
+}
+</script>
+</body>
+  </html>
