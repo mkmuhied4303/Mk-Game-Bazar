@@ -390,18 +390,18 @@ function choose(name){
  });
 }
 
-document.getElementById("orderForm").addEventListener("submit",function(e){
- e.preventDefault();
+document.getElementById("orderForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
 
- const pkg=document.getElementById("package").value;
- const uid=document.getElementById("uid").value.trim();
- const customer=document.getElementById("customer").value.trim();
- const phone=document.getElementById("phone").value.trim();
- const payment=document.getElementById("payment").value;
- const trx=document.getElementById("trx").value.trim();
+  const pkg = document.getElementById("package").value;
+  const uid = document.getElementById("uid").value.trim();
+  const customer = document.getElementById("customer").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const payment = document.getElementById("payment").value;
+  const trx = document.getElementById("trx").value.trim();
 
- const message=
- `MK GAME BAZAR - NEW ORDER
+  const message =
+`MK GAME BAZAR - NEW ORDER
 Package: ${pkg}
 Free Fire UID: ${uid}
 Customer: ${customer}
@@ -411,9 +411,27 @@ Payment Number: 01743038194
 Transaction ID: ${trx}
 Status: Payment verification pending`;
 
- window.location.href=
- "https://wa.me/"+whatsappNumber+
- "?text="+encodeURIComponent(message);
+  try {
+    await addDoc(collection(db, "orders"), {
+      packageName: pkg,
+      uid: uid,
+      customerName: customer,
+      phone: phone,
+      paymentMethod: payment,
+      transactionId: trx,
+      status: "Pending",
+      price: 0,
+      createdAt: serverTimestamp()
+    });
+
+    window.location.href =
+      "https://wa.me/" + whatsappNumber +
+      "?text=" + encodeURIComponent(message);
+
+  } catch (error) {
+    console.error("Order save error:", error);
+    alert("অর্ডার সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।");
+  }
 });
 </script>
 <script type="module">
@@ -453,7 +471,8 @@ const app = getApps().length
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-
+const db = getFirestore(app);
+ 
 const profileButton = document.getElementById("profile-button");
 const accountMenu = document.getElementById("account-menu");
 const loginButton = document.getElementById("google-login");
