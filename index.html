@@ -428,11 +428,10 @@ Status: Payment verification pending`;
       "https://wa.me/" + whatsappNumber +
       "?text=" + encodeURIComponent(message);
 
-  } catch (error) {
-    console.error("Order save error:", error);
-    alert("অর্ডার সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।");
-  }
-});
+} catch (error) {
+  console.error("Order save error:", error);
+  alert("Error: " + error.code + "\n" + error.message);
+}
 </script>
 <script type="module">
 import {
