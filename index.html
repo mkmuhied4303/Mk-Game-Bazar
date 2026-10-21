@@ -430,6 +430,13 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+ 
 const firebaseConfig = {
   apiKey: "AIzaSyB5t7O5NAfl5w_x8O4bNOd8QqMuUFazwig",
   authDomain: "mk-game-bazar.firebaseapp.com",
